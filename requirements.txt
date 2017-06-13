@@ -1,5 +1,5 @@
 bottle
 gunicorn
-gevent
+# gevent
 requests
 # basemap
