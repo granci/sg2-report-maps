@@ -1,6 +1,4 @@
-bottle  # for running web
-gunicorn  #  webserver
-requests  # for fetching data from other sub-micro-services
+bottle
+gunicorn
+requests
 matplotlib
-# pylab  # needed?
-#mpl_toolkits.basemap  # how to import Basemap
