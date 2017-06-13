@@ -3,4 +3,6 @@ gunicorn
 gevent
 requests
 # basemap
-requests
+numpy
+matplotlib
+git+https://github.com/markmuetz/basemap.git@pip_install#egg=basemap
