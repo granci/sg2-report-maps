@@ -29,15 +29,12 @@ def get():
     try:
         bottle.response.headers['Content-Type'] = "image/png"
         if type.lower() == "site_location":
+            # png = None
             png = map_generator.generateCountryMap(config_file, countryCode, lat=float(lat), lon=float(lon), whRatio=float(whratio), west=west, east=east, north=north, south=south)
         else:
             west, east, north, south = world_map_bbox
             png = map_generator.generateWorldMap(world_map, lat=float(lat), lon=float(lon), west=west, east=east, north=north, south=south, circle_radiuses=(12, 20), circle_width=3)
         content = png.getvalue()
-        # req.content_type = "image/png"
-        # req.set_content_length = len(content)
-        # req.write(content)
-        # return apache.OK
         return content
 
     except Exception as e:
