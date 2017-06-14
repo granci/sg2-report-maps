@@ -8,7 +8,7 @@ use updateCountryDatabase module to update our db.
 '''
 # from backends.conf import configuration
 # import MySQLdb
-import warnings
+# import warnings
 import json
 import StringIO
 
@@ -48,14 +48,14 @@ def generateWorldMap(world_image_path, lat=0, lon=0, west=-180, east=180, north=
 def generateCountryMap(config_file, countryCode=None, lat=0, lon=0, whRatio=1.2, expandRatio=10, showPlot=False, west=None, east=None, north=None, south=None):
     '''returns png image data (if show=False) of country map, envelope is expanded by ratio'''
     # print 'je tu'
-    with warnings.catch_warnings():
+    # with warnings.catch_warnings():
         # TODO: do this more effective way:
-        warnings.filterwarnings("ignore", category=UserWarning)
-        import matplotlib
-        if(showPlot==False): matplotlib.use('Agg')
-        from pylab import arange,show
-        import matplotlib.pyplot as plt
-        from mpl_toolkits.basemap import Basemap
+        # warnings.filterwarnings("ignore", category=UserWarning)
+    import matplotlib
+    if(showPlot==False): matplotlib.use('Agg')
+    from pylab import arange,show
+    import matplotlib.pyplot as plt
+    from mpl_toolkits.basemap import Basemap
 
     # conf = configuration.getActiveConfig()
     # conn=MySQLdb.connect(host=conf.countryMap_db_host,user=conf.countryMap_db_user,passwd=conf.countryMap_db_password,db=conf.countryMap_db_name)
