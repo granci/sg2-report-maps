@@ -2715,5 +2715,26 @@
 		"north": 53.5609,
 		"east": 134.774,
 		"south": 15.7754
+	},
+	{
+		"code": "world",
+		"west": -180.0,
+		"north": 90.0,
+		"east": 180.0,
+		"south": -90.0
+	},
+	{
+		"code": "europe",
+		"west": -10.0,
+		"north": 72.0,
+		"east": 45.0,
+		"south": 10.0
+	},
+	{
+		"code": "africa",
+		"west": -20.0,
+		"north": 40.0,
+		"east": 55.0,
+		"south": -35.0
 	}
 ]

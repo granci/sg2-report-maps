@@ -11,39 +11,108 @@ use updateCountryDatabase module to update our db.
 # import warnings
 import json
 import StringIO
+import os
+import math
+from PIL import Image, ImageDraw
 
 
-def generateWorldMap(world_image_path, lat=0, lon=0, west=-180, east=180, north=90, south=-90, circle_radiuses=(9, 15), circle_width=2):
-    from PIL import Image, ImageDraw
-    if west > 0:
-        west -= 360
-    if east < 0:
-        east += 360
-    # circle1_radius = 10
-    # circle2_radius = 15
-    # circle_width = 2
-    with Image.open(world_image_path) as img:
-        width, height = img.size
-        # print west, east
-        # print width, height
-        # print lat, lon
-        x_point = int(width * (lon - west) / (east - west))
-        y_point = int(height * (north - lat) / (north - south))
-        # print x_point, y_point
-        draw = ImageDraw.Draw(img)
-        # draw.ellipse((x_point - circle1_radius, y_point - circle1_radius, x_point + circle1_radius, y_point + circle1_radius), fill=None, outline='black')
-        # draw.ellipse((x_point - circle2_radius, y_point - circle2_radius, x_point + circle2_radius, y_point + circle2_radius), fill=None, outline='black')
-        # draw.point((x_point, y_point, x_point + circle1_radius, y_point + circle1_radius), fill='black')
-        for cr in circle_radiuses:
-            for i in range(0, circle_width):
-                draw.ellipse((x_point - cr - i, y_point - cr - i, x_point + cr + i, y_point + cr + i), fill=None, outline='black')
-                # draw.ellipse((x_point - circle2_radius - i, y_point - circle2_radius - i, x_point + circle2_radius + i, y_point + circle2_radius + i), fill=None, outline='black')
-        # print 'elipsa'
+def generate_report_map(map_image_path, lat=None, lon=None, west=-180., east=180., north=90., south=-90., circle_radiuses=(9, 15), circle_width=2, circle_fill=None):
+    # from PIL import Image, ImageDraw
+    with Image.open(map_image_path) as img:
+        if lat and lon and west and east and north and south:
+            if west > 180:
+                west -= 360
+            if east < -180:
+                east += 360
+            width, height = img.size
+            x_point = int(width * (lon - west) / (east - west))
+            y_point = int(height * (north - lat) / (north - south))
+            # print lat, lon, west, east, north, south
+            # print width, height
+            # print x_point, y_point, width * (lon - west) / (east - west), height * (north - lat) / (north - south)
+            draw = ImageDraw.Draw(img)
+            # draw.ellipse((x_point - circle1_radius, y_point - circle1_radius, x_point + circle1_radius, y_point + circle1_radius), fill=None, outline='black')
+            # draw.ellipse((x_point - circle2_radius, y_point - circle2_radius, x_point + circle2_radius, y_point + circle2_radius), fill=None, outline='black')
+            # draw.point((x_point, y_point, x_point + circle1_radius, y_point + circle1_radius), fill='black')
+            for cr in circle_radiuses:
+                for i in range(0, circle_width):
+                    # print circle_fill, cr
+                    draw.ellipse((x_point - cr - i, y_point - cr - i, x_point + cr + i, y_point + cr + i), fill=circle_fill, outline='black')
+                    # draw.ellipse((x_point - circle2_radius - i, y_point - circle2_radius - i, x_point + circle2_radius + i, y_point + circle2_radius + i), fill=None, outline='black')
+            # print 'elipsa'
         imgdata = StringIO.StringIO()
         # print world_image_path.split('.')[-1]
-        img.save(imgdata, format=world_image_path.split('.')[-1])
+        img.save(imgdata, format=map_image_path.split('.')[-1])
         # print 'save'
     return imgdata
+
+
+def generate_site_map(country_img_dir, country_code=None, lat=None, lon=None, circle_radius=50, circle_width=5, circle_fill='blue'):
+    assert os.path.isdir(country_img_dir), "Image folder '{}' does not exist!".format(country_img_dir)
+    cntry_images = os.listdir(country_img_dir)
+    failover_maps = ["africa", "europe"]
+    ultimate_failover = "world"
+    # print lat, lon
+    # imgdata = None
+    img_path = None
+    bbox = None
+
+    # try to find proper country map
+    for img in cntry_images:
+        img_code = img.split("_")[0]
+        if country_code.lower() == img_code.lower():
+            img_path = os.path.join(country_img_dir, img)
+            bbox = get_bbox_from_image_name(img_path)
+            if lat and lon and bbox and (lat < bbox[1] or lat > bbox[3] or lon < bbox[0] or lon > bbox[2]):  # if doesn't fit to country bbox
+                img_path = None
+
+    # failover to continent maps
+    lowest_center_distance = 1000  # set something huge
+    # if not imgdata:
+    if not img_path:
+        for img in cntry_images:
+            img_code = img.split("_")[0]
+            # print img_code, failover_maps
+            if img_code in failover_maps:
+                failover_img_path = os.path.join(country_img_dir, img)
+                failover_bbox = get_bbox_from_image_name(failover_img_path)
+                if lat and lon and failover_bbox and lat > failover_bbox[1] and lat < failover_bbox[3] and lon > failover_bbox[0] and lon < failover_bbox[2]:
+                    # pythagoras sentence:
+                    center_distance = math.sqrt(math.pow((failover_bbox[0] - failover_bbox[2]) / 2 - lon, 2) + math.pow((failover_bbox[1] - failover_bbox[3]) / 2 - lat, 2))
+                    # print img_code, center_distance
+                    if center_distance < lowest_center_distance:
+                        img_path = failover_img_path
+                        bbox = failover_bbox
+
+    # failover to world map
+    # if not imgdata:
+    if not img_path:
+        for img in cntry_images:
+            img_code = img.split("_")[0]
+            if img_code == ultimate_failover:
+                img_path = os.path.join(country_img_dir, img)
+                bbox = get_bbox_from_image_name(img_path)
+
+    if not bbox:
+        bbox = [None, None, None, None]
+    imgdata = generate_report_map(img_path, lat=lat, lon=lon, west=bbox[0], east=bbox[2], north=bbox[3], south=bbox[1],
+                                  circle_radiuses=(circle_radius,), circle_width=circle_width, circle_fill=circle_fill)
+
+    return imgdata
+
+
+def get_bbox_from_image_name(image_path):
+    """
+
+    :param image_path: string with image path
+    :return: list [west, south, east, north] or None (if can not be detected from the file name)
+    """
+    try:
+        bbox = map(float, os.path.splitext(os.path.basename(image_path))[0].split("_")[-1].split(","))
+    except:
+        bbox = None
+    return bbox
+
 
 def generateCountryMap(config_file, countryCode=None, lat=0, lon=0, whRatio=1.2, expandRatio=10, showPlot=False, west=None, east=None, north=None, south=None):
     '''returns png image data (if show=False) of country map, envelope is expanded by ratio'''
