@@ -2,6 +2,7 @@ bottle
 gunicorn
 gevent
 requests
+pillow
 # basemap
 # numpy
 # matplotlib
