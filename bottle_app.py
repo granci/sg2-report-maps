@@ -36,7 +36,7 @@ def get():
         if type.lower() == "site_location":
             # png = None
             # png = map_generator.generateCountryMap(config_file, countryCode, lat=float(lat), lon=float(lon), whRatio=float(whratio), west=west, east=east, north=north, south=south)
-            png = map_generator.generate_site_map(maps_folder, countryCode, lat=lat, lon=lon, circle_radius=50, circle_width=5, circle_fill='blue')
+            png = map_generator.generate_site_map(maps_folder, countryCode, lat=lat, lon=lon, circle_radius=10, circle_width=5, circle_fill='blue')
         # for cover_map:
         else:
             west, east, north, south = world_map_bbox
