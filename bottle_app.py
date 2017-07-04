@@ -20,7 +20,7 @@ def get():
     lat = bottle.request.query.getone("lat", None)
     lon = bottle.request.query.getone("lon", None)
     # whratio = bottle.request.query.getone("whratio", 1)
-    type = bottle.request.query.getone("type", "site_location")
+    type = bottle.request.query.getone("type", "cover_map")
     countryCode = bottle.request.query.getone("countryCode", None)
     # west = bottle.request.query.getone('west', None)
     # east = bottle.request.query.getone('east', None)
@@ -37,6 +37,7 @@ def get():
             # png = None
             # png = map_generator.generateCountryMap(config_file, countryCode, lat=float(lat), lon=float(lon), whRatio=float(whratio), west=west, east=east, north=north, south=south)
             png = map_generator.generate_site_map(maps_folder, countryCode, lat=lat, lon=lon, circle_radius=50, circle_width=5, circle_fill='blue')
+        # for cover_map:
         else:
             west, east, north, south = world_map_bbox
             png = map_generator.generate_report_map(world_map, lat=lat, lon=lon, west=west, east=east, north=north, south=south, circle_radiuses=(12, 20), circle_width=3)

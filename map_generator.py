@@ -60,7 +60,7 @@ def generate_site_map(country_img_dir, country_code=None, lat=None, lon=None, ci
     # try to find proper country map
     for img in cntry_images:
         img_code = img.split("_")[0]
-        if country_code.lower() == img_code.lower():
+        if country_code and country_code.lower() == img_code.lower():
             img_path = os.path.join(country_img_dir, img)
             bbox = get_bbox_from_image_name(img_path)
             if lat and lon and bbox and (lat < bbox[1] or lat > bbox[3] or lon < bbox[0] or lon > bbox[2]):  # if doesn't fit to country bbox

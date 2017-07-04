@@ -1,5 +1,5 @@
 from qgis.core import *
-from PyQt4.Qt import QSize
+from PyQt4.Qt import QSize, QDomDocument
 
 from general_utils.basic_logger import make_logger
 
@@ -65,6 +65,54 @@ def fit_map_to_extent(qgis_project_instance, extent=None, composer_name=None, ma
 
     return dict(size=composition_size, bbox=composer_bbox)
     # return qgis_project_instance
+
+
+def adjust_grid_labels(qgis_project_instance, extent=None, grid_name_part='latlon'):
+    # print extent
+    # pos_x_string = "1~~1~~if('type'='lat',{east},$x_at(0))~~".format(east=extent[2])
+    pos_x_string = "1~~1~~if(&quot;type&quot;='lat',23.250,$x_at(0))~~".format(east=extent[2])
+
+    # pos_y_string = "1~~1~~if('type'='lat',$y_at(0),{north})~~".format(north=extent[3])
+    pos_y_string = "1~~1~~if(&quot;type&quot;='lat',$y_at(0),{north})~~".format(north=extent[3])
+    # h_ali_string = "1~~1~~'right'~~"
+    # v_ali_string = "1~~1~~'half'~~"
+    for l in qgis_project_instance.canvas.layers():
+        if grid_name_part in l.name():
+            # label = l.label()
+            # print l.name()
+            # util.introspect(label)
+            # util.introspect(l)
+            # print label.XCoordinate
+            # print label.readXML()
+            l = modify_layer_customproperty(l, "labeling/dataDefined/PositionX", pos_x_string)
+            l = modify_layer_customproperty(l, "labeling/dataDefined/PositionY", pos_y_string)
+            # l = modify_layer_customproperty(l, "labeling/dataDefined/Hali", h_ali_string)
+            # l = modify_layer_customproperty(l, "labeling/dataDefined/Vali", v_ali_string)
+            # break
+    return qgis_project_instance
+
+
+def modify_layer_customproperty(qgis_vector_layer_obj, property_name, value_string):
+    XMLDocument = QDomDocument("style")
+    XMLMapLayers = XMLDocument.createElement("maplayers")
+    XMLMapLayer = XMLDocument.createElement("maplayer")
+    qgis_vector_layer_obj.writeLayerXML(XMLMapLayer, XMLDocument)
+    if XMLMapLayer.firstChildElement("customproperties").hasChildNodes():
+        properties = XMLMapLayer.firstChildElement("customproperties").childNodes()
+        for i in range(0, properties.size()):
+            property_attr = properties.at(i).attributes().namedItem('key')
+            value_attr = properties.at(i).attributes().namedItem('value')
+            if property_attr.nodeValue() == property_name:
+                value_attr.setNodeValue(value_string)
+        XMLMapLayers.appendChild(XMLMapLayer)
+        XMLDocument.appendChild(XMLMapLayers)
+        logger.debug("Layer's customproperty '{0}' modified to value '{1}'!".format(property_name, value_string))
+    else:
+        logger.warning("Layer's customproperty '{}' did not get modified!".format(property_name))
+    qgis_vector_layer_obj.readLayerXML(XMLMapLayer)
+    qgis_vector_layer_obj.reload()
+    return qgis_vector_layer_obj
+
 
 def export_composition_image(qgis_project_instance, output_image_path, output_resolution=None, composer_name=None):
     assert isinstance(qgis_project_instance, project.QGISProject), "Parameter {} is not an instance of project.QGISProject() object!".format(qgis_project_instance)
