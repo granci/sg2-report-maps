@@ -69,13 +69,8 @@ def fit_map_to_extent(qgis_project_instance, extent=None, composer_name=None, ma
 
 def adjust_grid_labels(qgis_project_instance, extent=None, grid_name_part='latlon'):
     # print extent
-    # pos_x_string = "1~~1~~if('type'='lat',{east},$x_at(0))~~".format(east=extent[2])
-    pos_x_string = "1~~1~~if(&quot;type&quot;='lat',23.250,$x_at(0))~~".format(east=extent[2])
-
-    # pos_y_string = "1~~1~~if('type'='lat',$y_at(0),{north})~~".format(north=extent[3])
-    pos_y_string = "1~~1~~if(&quot;type&quot;='lat',$y_at(0),{north})~~".format(north=extent[3])
-    # h_ali_string = "1~~1~~'right'~~"
-    # v_ali_string = "1~~1~~'half'~~"
+    pos_x_string = '1~~1~~if("type"=\'lat\',{east},$x_at(0))~~'.format(east=extent[2])
+    pos_y_string = '1~~1~~if("type"=\'lat\',$y_at(0),{north})~~'.format(north=extent[3])
     for l in qgis_project_instance.canvas.layers():
         if grid_name_part in l.name():
             # label = l.label()
@@ -84,11 +79,8 @@ def adjust_grid_labels(qgis_project_instance, extent=None, grid_name_part='latlo
             # util.introspect(l)
             # print label.XCoordinate
             # print label.readXML()
-            l = modify_layer_customproperty(l, "labeling/dataDefined/PositionX", pos_x_string)
-            l = modify_layer_customproperty(l, "labeling/dataDefined/PositionY", pos_y_string)
-            # l = modify_layer_customproperty(l, "labeling/dataDefined/Hali", h_ali_string)
-            # l = modify_layer_customproperty(l, "labeling/dataDefined/Vali", v_ali_string)
-            # break
+            modify_layer_customproperty(l, "labeling/dataDefined/PositionX", pos_x_string)
+            modify_layer_customproperty(l, "labeling/dataDefined/PositionY", pos_y_string)
     return qgis_project_instance
 
 
