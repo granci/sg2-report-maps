@@ -50,7 +50,7 @@ def generate_report_map(map_image_path, lat=None, lon=None, west=-180., east=180
 def generate_site_map(country_img_dir, country_code=None, lat=None, lon=None, circle_radius=50, circle_width=5, circle_fill='blue'):
     assert os.path.isdir(country_img_dir), "Image folder '{}' does not exist!".format(country_img_dir)
     cntry_images = os.listdir(country_img_dir)
-    failover_maps = ["africa", "europe"]
+    failover_maps = ["africa", "europe", "middle-east", "asia", "australia-oceania", "north-america", "central-america", "south-america"]
     ultimate_failover = "world"
     # print lat, lon
     # imgdata = None

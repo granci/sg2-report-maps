@@ -31,7 +31,7 @@ if __name__ == '__main__':
         composer_dict = maps_creator_utils.qgis_utils.fit_map_to_extent(project_instance, extent=bbox, exact_extent=False)
         # print bbox
         # print composer_dict
-        project_instance.save(qgis_project_file="test1.qgs")
+        # project_instance.save(qgis_project_file="test1.qgs")  # TODO: comment out, for debugging only!
         project_instance = maps_creator_utils.qgis_utils.adjust_grid_labels(project_instance, extent=composer_dict.get('bbox', bbox))
         # print composer_dict.get("bbox")
         # print composer_dict.get("bbox")[0]
@@ -46,7 +46,7 @@ if __name__ == '__main__':
         export_image_path = os.path.join(output_folder, export_filename)
         # maps_creator_utils.qgis_utils.export_composition_image(exports_project_instance, export_image_path)
         maps_creator_utils.qgis_utils.export_composition_image(project_instance, export_image_path)
-        project_instance.save(qgis_project_file="test2.qgs")
+        # project_instance.save(qgis_project_file="test2.qgs")  # TODO: comment out, for debugging only!
 
         # break
 

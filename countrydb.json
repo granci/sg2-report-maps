@@ -2725,16 +2725,58 @@
 	},
 	{
 		"code": "europe",
-		"west": -10.0,
-		"north": 72.0,
+		"west": -11.0,
+		"north": 65.0,
 		"east": 45.0,
-		"south": 10.0
+		"south": 34.0
 	},
 	{
 		"code": "africa",
 		"west": -20.0,
-		"north": 40.0,
-		"east": 55.0,
+		"north": 38.0,
+		"east": 52.0,
 		"south": -35.0
+	},
+	{
+		"code": "middle-east",
+		"west": 25.0,
+		"north": 43.0,
+		"east": 64.0,
+		"south": 10.0
+	},
+	{
+		"code": "asia",
+		"west": 32.0,
+		"north": 65.0,
+		"east": 165.0,
+		"south": 0.0
+	},
+	{
+		"code": "australia-oceania",
+		"west": 93.0,
+		"north": 20.0,
+		"east": 180.0,
+		"south": -50.0
+	},
+	{
+		"code": "north-america",
+		"west": -170.0,
+		"north": 65.0,
+		"east": -50.0,
+		"south": 10.0
+	},
+	{
+		"code": "central-america",
+		"west": -118.0,
+		"north": 34.0,
+		"east": -58.0,
+		"south": 8.0
+	},
+	{
+		"code": "south-america",
+		"west": -92.0,
+		"north": 13.0,
+		"east": -32.0,
+		"south": -57.0
 	}
 ]
