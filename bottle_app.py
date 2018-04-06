@@ -39,7 +39,7 @@ def get():
         if map_type.lower() == "site_location":
             # png = None
             # png = map_generator.generateCountryMap(config_file, countryCode, lat=float(lat), lon=float(lon), whRatio=float(whratio), west=west, east=east, north=north, south=south)
-            png = map_generator.generate_site_map(maps_folder, countryCode, lat=lat, lon=lon, circle_radius=10, circle_width=5, circle_fill='blue')
+            png = map_generator.generate_site_map(maps_folder, countryCode, lat=lat, lon=lon, circle_radius=15, circle_width=5, circle_fill='black', circle_outline='white')
 
         # for cover_maps:
         else:
@@ -48,7 +48,8 @@ def get():
                 world_map = world_map_solar
             else:
                 world_map = world_map_pv
-            png = map_generator.generate_report_map(world_map, lat=lat, lon=lon, west=west, east=east, north=north, south=south, circle_radiuses=(12, 20), circle_width=3)
+            png = map_generator.generate_report_map(world_map, lat=lat, lon=lon, west=west, east=east, north=north, south=south, circle_radius=10, circle_width=3, circle_fill='black', circle_outline='white')
+            # png = map_generator.generate_report_map(world_map, lat=lat, lon=lon, west=west, east=east, north=north, south=south)
         content = png.getvalue()
         png.close()
         return content

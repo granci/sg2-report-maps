@@ -16,7 +16,7 @@ import math
 from PIL import Image, ImageDraw
 
 
-def generate_report_map(map_image_path, lat=None, lon=None, west=-180., east=180., north=90., south=-90., circle_radiuses=(9, 15), circle_width=2, circle_fill=None):
+def generate_report_map(map_image_path, lat=None, lon=None, west=-180., east=180., north=90., south=-90., circle_radius=20, circle_width=5, circle_fill='black', circle_outline='white'):
     # from PIL import Image, ImageDraw
     with Image.open(map_image_path) as img:
         if lat and lon and west and east and north and south:
@@ -27,27 +27,24 @@ def generate_report_map(map_image_path, lat=None, lon=None, west=-180., east=180
             width, height = img.size
             x_point = int(width * (lon - west) / (east - west))
             y_point = int(height * (north - lat) / (north - south))
-            # print lat, lon, west, east, north, south
-            # print width, height
-            # print x_point, y_point, width * (lon - west) / (east - west), height * (north - lat) / (north - south)
             draw = ImageDraw.Draw(img)
-            # draw.ellipse((x_point - circle1_radius, y_point - circle1_radius, x_point + circle1_radius, y_point + circle1_radius), fill=None, outline='black')
-            # draw.ellipse((x_point - circle2_radius, y_point - circle2_radius, x_point + circle2_radius, y_point + circle2_radius), fill=None, outline='black')
-            # draw.point((x_point, y_point, x_point + circle1_radius, y_point + circle1_radius), fill='black')
-            for cr in circle_radiuses:
+            try:
+                iterator = iter(circle_radius)  # circle_radius can be iterable (to make more concentrated circles)
+            except TypeError:
+                circle_radiuses = (circle_radius, )
+            else:
+                circle_radiuses = circle_radius
+            draw.ellipse((x_point - circle_radiuses[-1], y_point - circle_radiuses[-1], x_point + circle_radiuses[-1], y_point + circle_radiuses[-1]), fill=circle_fill, outline=None)
+            for j in range(0, len(circle_radiuses)):
                 for i in range(0, circle_width):
-                    # print circle_fill, cr
-                    draw.ellipse((x_point - cr - i, y_point - cr - i, x_point + cr + i, y_point + cr + i), fill=circle_fill, outline='black')
-                    # draw.ellipse((x_point - circle2_radius - i, y_point - circle2_radius - i, x_point + circle2_radius + i, y_point + circle2_radius + i), fill=None, outline='black')
-            # print 'elipsa'
+                    draw.ellipse((x_point - circle_radiuses[j] - i, y_point - circle_radiuses[j] - i, x_point + circle_radiuses[j] + i, y_point + circle_radiuses[j] + i),
+                                 fill=None, outline=circle_outline)
         imgdata = StringIO.StringIO()
-        # print world_image_path.split('.')[-1]
         img.save(imgdata, format=map_image_path.split('.')[-1])
-        # print 'save'
     return imgdata
 
 
-def generate_site_map(country_img_dir, country_code=None, lat=None, lon=None, circle_radius=50, circle_width=5, circle_fill='blue'):
+def generate_site_map(country_img_dir, country_code=None, lat=None, lon=None, circle_radius=50, circle_width=5, circle_fill='black', circle_outline='white'):
     assert os.path.isdir(country_img_dir), "Image folder '{}' does not exist!".format(country_img_dir)
     cntry_images = os.listdir(country_img_dir)
     failover_maps = ["africa", "europe", "middle-east", "asia", "australia-oceania", "north-america", "central-america", "south-america"]
@@ -97,7 +94,7 @@ def generate_site_map(country_img_dir, country_code=None, lat=None, lon=None, ci
     if not bbox:
         bbox = [None, None, None, None]
     imgdata = generate_report_map(img_path, lat=lat, lon=lon, west=bbox[0], east=bbox[2], north=bbox[3], south=bbox[1],
-                                  circle_radiuses=(circle_radius,), circle_width=circle_width, circle_fill=circle_fill)
+                                  circle_radius=circle_radius, circle_width=circle_width, circle_fill=circle_fill, circle_outline=circle_outline)
 
     return imgdata
 
