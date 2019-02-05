@@ -13,7 +13,7 @@ app = bottle.default_app()  # bottle WSGI app object
 @bottle.get("/")
 def get():
     dir_path = os.path.dirname(os.path.realpath(__file__))
-    maps_folder = os.path.join(dir_path, 'country_maps_old')
+    maps_folder = os.path.join(dir_path, 'country_maps')
     # config_file = os.path.join(dir_path, 'countrydb.json')
     world_map_pv = os.path.join(dir_path, 'pvout_w21cm_borders.png')
     world_map_solar = os.path.join(dir_path, 'pvout_w21cm_latlon+tropics+borders.png')  # TODO: replace by some ghi/dni map!
