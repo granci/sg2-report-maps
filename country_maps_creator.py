@@ -9,7 +9,7 @@ if __name__ == '__main__':
 
     config_filepath = "countrydb.json"
     # gis_filepath = os.path.join(os.path.dirname(os.path.realpath(__file__)), "maps_creator_utils/grey_map_test.qgs")  # must be specified full path
-    gis_filepath = os.path.join(os.path.dirname(os.path.realpath(__file__)), "maps_creator_utils/greymap/greymap_7x7cm-v2.qgs")  # must be specified full path
+    gis_filepath = os.path.join(os.path.dirname(os.path.realpath(__file__)), "maps_creator_utils/greymap/greymap_7x7cm-v3.qgs")  # must be specified full path
     output_folder = "country_maps"
     map_type = "country-map"
     exports_extension = ".png"
