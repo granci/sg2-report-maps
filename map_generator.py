@@ -24,6 +24,7 @@ def generate_report_map(map_image_path, lat=None, lon=None, west=-180., east=180
                 west -= 360
             if east < -180:
                 east += 360
+            img = img.convert("RGBA")  # should be able to use RGBA codes after this
             width, height = img.size
             x_point = int(width * (lon - west) / (east - west))
             y_point = int(height * (north - lat) / (north - south))
