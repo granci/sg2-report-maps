@@ -16,7 +16,7 @@ def get():
     maps_folder = os.path.join(dir_path, 'country_maps')
     # config_file = os.path.join(dir_path, 'countrydb.json')
     world_map_pv = os.path.join(dir_path, 'pvout_w21cm_borders.png')
-    world_map_solar = os.path.join(dir_path, 'pvout_w21cm_latlon+tropics+borders.png')  # TODO: replace by some ghi/dni map!
+    world_map_solar = os.path.join(dir_path, 'pvout_w21cm_borders.png')  # TODO: replace by some ghi/dni map!
     world_map_bbox = [-180, 180, 65, -60]
     lat = bottle.request.query.getone("lat", None)
     lon = bottle.request.query.getone("lon", None)
@@ -49,7 +49,8 @@ def get():
             else:
                 world_map = world_map_pv
             # png = map_generator.generate_report_map(world_map, lat=lat, lon=lon, west=west, east=east, north=north, south=south, circle_radius=10, circle_width=3, circle_fill='black', circle_outline='white')
-            png = map_generator.generate_report_map(world_map, lat=lat, lon=lon, west=west, east=east, north=north, south=south, circle_radius=20, circle_width=6, circle_fill=(255, 255, 255, 0), circle_outline='black')
+            # png = map_generator.generate_report_map(world_map, lat=lat, lon=lon, west=west, east=east, north=north, south=south, circle_radius=20, circle_width=6, circle_fill=(255, 255, 255, 0), circle_outline='black')
+            png = map_generator.generate_report_map(world_map, lat=lat, lon=lon, west=west, east=east, north=north, south=south, circle_radius=20, circle_width=8, circle_fill=None, circle_outline='black')
             # png = map_generator.generate_report_map(world_map, lat=lat, lon=lon, west=west, east=east, north=north, south=south)
         content = png.getvalue()
         png.close()
