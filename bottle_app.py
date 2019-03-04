@@ -49,8 +49,7 @@ def get():
             else:
                 world_map = world_map_pv
             # png = map_generator.generate_report_map(world_map, lat=lat, lon=lon, west=west, east=east, north=north, south=south, circle_radius=10, circle_width=3, circle_fill='black', circle_outline='white')
-            # png = map_generator.generate_report_map(world_map, lat=lat, lon=lon, west=west, east=east, north=north, south=south, circle_radius=20, circle_width=6, circle_fill=(255, 255, 255, 0), circle_outline='black')
-            png = map_generator.generate_report_map(world_map, lat=lat, lon=lon, west=west, east=east, north=north, south=south, circle_radius=20, circle_width=8, circle_fill=None, circle_outline='black')
+            png = map_generator.generate_report_map(world_map, lat=lat, lon=lon, west=west, east=east, north=north, south=south, circle_radius=20, circle_width=12, circle_fill=None, circle_outline='black')
             # png = map_generator.generate_report_map(world_map, lat=lat, lon=lon, west=west, east=east, north=north, south=south)
         content = png.getvalue()
         png.close()
